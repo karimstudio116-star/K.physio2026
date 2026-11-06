@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="k.physio">
+<meta name="theme-color" content="#0e9aa7">
+<title>k.physio</title>
+<style>
+:root{--bg:#f3f7f9;--card:#fff;--text:#1b2a3a;--muted:#6b7a8a;--primary:#0e9aa7;--primary-d:#0b7b86;--primary-soft:#e3f5f7;--ok:#1f9d63;--ok-soft:#e2f6ec;--bad:#d94b4b;--bad-soft:#fde8e8;--warn:#e69a1c;--border:#e1e8ee;--shadow:0 2px 10px rgba(20,40,60,.07)}
+[data-theme=dark]{--bg:#0f161d;--card:#18222c;--text:#e8eef3;--muted:#93a3b2;--primary:#27b7c5;--primary-d:#5fd3de;--primary-soft:#143741;--ok:#3ccf8a;--ok-soft:#14352a;--bad:#ff7a7a;--bad-soft:#3b1d1f;--warn:#f0b24a;--border:#2a3743;--shadow:0 2px 10px rgba(0,0,0,.4)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{font-family:-apple-system,"SF Arabic","Geeza Pro",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);font-size:17px;line-height:1.5}
+.app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+.side{background:var(--card);border-inline-end:1px solid var(--border);padding:18px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:6px}
+.brand{font-size:26px;font-weight:800;color:var(--primary);padding:6px 10px 16px;letter-spacing:.5px;direction:ltr;text-align:right}
+.brand small{display:block;font-size:12px;color:var(--muted);font-weight:500;direction:rtl}
+.nav-btn{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;padding:10px 14px;border:0;border-radius:12px;background:transparent;color:var(--text);font:inherit;font-size:17px;cursor:pointer;text-align:start}
+.nav-btn.on{background:var(--primary-soft);color:var(--primary-d);font-weight:700}
+.sp{flex:1}
+main{padding:20px 24px 40px;min-width:0;max-width:1200px;width:100%}
+h2{margin:0 0 14px;font-size:24px}
+h3{margin:0 0 10px;font-size:19px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px}
+.row-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.row-h .sp{flex:1}
+.btn{min-height:44px;padding:8px 18px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-size:16px;cursor:pointer;font-weight:600}
+.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn.bad{background:var(--bad);border-color:var(--bad);color:#fff}
+.btn.ghost{background:transparent}
+.btn.sm{min-height:38px;padding:4px 12px;font-size:15px}
+.btn.outline-bad{color:var(--bad);border-color:var(--bad);background:transparent}
+.btn:active{opacity:.75}
+input,select,textarea{font:inherit;font-size:17px;width:100%;min-height:46px;padding:8px 12px;border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text)}
+textarea{min-height:70px;resize:vertical}
+input[type=date],input[type=month]{direction:ltr;text-align:right}
+input[type=tel],input[type=number]{direction:ltr;text-align:right}
+label.f{display:block;font-size:14px;color:var(--muted);font-weight:600}
+label.f>input,label.f>select,label.f>textarea{margin-top:4px;color:var(--text);font-weight:400}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid2 .wide{grid-column:1/-1}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
+.stat .n{font-size:26px;font-weight:800;margin-top:2px}
+.stat .l{color:var(--muted);font-size:14px}
+.stat.ok .n{color:var(--ok)}.stat.bad .n{color:var(--bad)}.stat.pri .n{color:var(--primary)}
+.datebar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.datebar .title{font-size:20px;font-weight:800;min-width:190px;text-align:center}
+.datebar input[type=date]{width:auto}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;cursor:pointer}
+.chip input{position:absolute;opacity:0;width:1px;height:1px;min-height:0}
+.chip span,.pill{display:inline-block;padding:10px 16px;border:2px solid var(--border);border-radius:999px;background:var(--card)}
+.chip input:checked+span,.pill.on{border-color:var(--primary);background:var(--primary-soft);color:var(--primary-d);font-weight:700}
+.pill{cursor:pointer;border-width:1px;padding:7px 14px;font:inherit;font-size:15px;color:var(--text)}
+.item{display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.item:last-child{border-bottom:0}
+.item .who{flex:1;min-width:180px;cursor:pointer}
+.item .who b{font-size:18px}
+.item .st{min-width:170px;display:flex;flex-direction:column;gap:4px}
+.sub{color:var(--muted);font-size:14px}
+.avatar{width:44px;height:44px;border-radius:50%;background:var(--primary-soft);color:var(--primary-d);display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;flex:none}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700}
+.b-ok{background:var(--ok-soft);color:var(--ok)}.b-bad{background:var(--bad-soft);color:var(--bad)}.b-mut{background:var(--border);color:var(--muted)}.b-pri{background:var(--primary-soft);color:var(--primary-d)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:16px}
+th,td{padding:10px 8px;text-align:start;border-bottom:1px solid var(--border);white-space:nowrap}
+th{color:var(--muted);font-size:14px;font-weight:600}
+tr.click{cursor:pointer}
+tr.click:active{background:var(--primary-soft)}
+tfoot td{font-weight:800;border-top:2px solid var(--border);border-bottom:0}
+.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.info div b{display:block;color:var(--muted);font-size:13px;font-weight:600}
+.info a{color:var(--primary-d);text-decoration:none;direction:ltr;unicode-bidi:embed}
+.empty{text-align:center;color:var(--muted);padding:26px 10px}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:14px;z-index:50}
+.modal{background:var(--card);border-radius:18px;padding:18px;width:100%;max-width:680px;max-height:92vh;overflow:auto}
+.modal h3{font-size:21px}
+.mbody{display:flex;flex-direction:column;gap:12px;margin-bottom:14px}
+.mact{display:flex;gap:10px}
+.mact .btn{flex:1}
+.srow{border:2px solid var(--border);border-radius:14px;padding:10px}
+.srow.on{border-color:var(--primary);background:var(--primary-soft)}
+.srow .fields{display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-top:10px;opacity:.45}
+.srow.on .fields{opacity:1}
+.prow{display:flex;align-items:flex-end;gap:10px;margin-top:8px}
+.prow label.f{flex:1}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:12px 20px;border-radius:12px;z-index:99;opacity:0;pointer-events:none;transition:opacity .25s}
+#toast.show{opacity:1}
+.ltr{direction:ltr;unicode-bidi:embed}
+.neg{color:var(--bad);font-weight:700}.pos{color:var(--ok);font-weight:700}
+.hint{background:var(--primary-soft);color:var(--primary-d);padding:12px 14px;border-radius:12px;margin-bottom:14px}
+@media (max-width:820px){
+ .app{grid-template-columns:1fr}
+ .side{position:fixed;bottom:0;top:auto;inset-inline:0;height:auto;flex-direction:row;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:20;border-top:1px solid var(--border);border-inline-end:0;overflow-x:auto}
+ .brand,.sp{display:none}
+ .nav-btn{flex-direction:column;gap:2px;font-size:12px;min-height:54px;padding:6px;justify-content:center;text-align:center;min-width:64px}
+ main{padding:14px 12px 110px}
+ .grid2{grid-template-columns:1fr}
+ .srow .fields{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+ <nav class="side">
+  <div class="brand" id="brand"></div>
+  <button class="nav-btn" data-a="go" data-id="att" data-v="att">📋 <span>الحضور اليومي</span></button>
+  <button class="nav-btn" data-a="go" data-id="kids" data-v="kids">👶 <span>الأطفال</span></button>
+  <button class="nav-btn" data-a="go" data-id="docs" data-v="docs">🩺 <span>الأطباء</span></button>
+  <button class="nav-btn" data-a="go" data-id="days" data-v="days">📅 <span>سجل الأيام</span></button>
+  <button class="nav-btn" data-a="go" data-id="acc" data-v="acc">💰 <span>الحسابات</span></button>
+  <button class="nav-btn" data-a="go" data-id="set" data-v="set">⚙️ <span>لوحة التحكم</span></button>
+  <div class="sp"></div>
+  <button class="nav-btn" data-a="theme" id="themeBtn"></button>
+ </nav>
+ <main><div id="main"></div></main>
+</div>
+<div id="toast"></div>
+<script>
+(function(){
+'use strict';
+/* ---------- أدوات ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const todayStr=()=>iso(new Date());
+const parse=s=>{const p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2])};
+const fmt=s=>{if(!s)return '—';const d=parse(s);return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()};
+const DAYS=['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const addDays=(s,n)=>{const d=parse(s);d.setDate(d.getDate()+n);return iso(d)};
+const mk=s=>s.slice(0,7);
+const addMonth=(m,n)=>{const p=m.split('-').map(Number);const d=new Date(p[0],p[1]-1+n,1);return d.getFullYear()+'-'+pad(d.getMonth()+1)};
+const mLabel=m=>{const p=m.split('-');return MONTHS[p[1]-1]+' '+p[0]};
+const dayLabel=s=>DAYS[parse(s).getDay()]+' '+fmt(s);
+const sum=a=>a.reduce((s,x)=>s+x,0);
+function age(b){if(!b)return '—';const bd=parse(b),n=new Date();let m=(n.getFullYear()-bd.getFullYear())*12+n.getMonth()-bd.getMonth();if(n.getDate()<bd.getDate())m--;if(m<0)return '—';const y=Math.floor(m/12),r=m%12;return y?(y+' سنة'+(r?' و'+r+' شهر':'')):(r+' شهر')}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),2400)}
+
+/* ---------- البيانات ---------- */
+const KEY='kphysio_db_v1';
+function seed(){return{settings:{center:'k.physio',currency:'ج.م',defaultPrice:0,theme:null,lastBackup:null},
+ depts:[{id:uid(),name:'علاج طبيعي',active:true,price:''},{id:uid(),name:'تخاطب',active:true,price:''},{id:uid(),name:'تنمية مهارات',active:true,price:''}],
+ doctors:[],children:[],attendance:[],payments:[]}}
+function load(){try{const r=localStorage.getItem(KEY);if(r)return JSON.parse(r)}catch(e){}return null}
+let db=load()||seed();
+function fix(){
+ db.settings=Object.assign({center:'k.physio',currency:'ج.م',defaultPrice:0,theme:null,lastBackup:null},db.settings||{});
+ ['depts','doctors','children','attendance','payments'].forEach(k=>{if(!Array.isArray(db[k]))db[k]=[]});
+ db.depts.forEach(d=>{if(d.price===undefined)d.price=''});
+ db.children.forEach(c=>{if(!c.prices||typeof c.prices!=='object'){c.prices={};if(c.deptId)c.prices[c.deptId]=+c.price||0}});
+ db.attendance.forEach(a=>{if(a.deptId===undefined){const c=db.children.find(x=>x.id===a.childId);a.deptId=a.status==='absent'?'':((c&&c.deptId)||'')}});
+}
+fix();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){toast('تعذر الحفظ على الجهاز!')}}
+
+const money=n=>(Math.round((n||0)*100)/100).toLocaleString('en-US')+' '+db.settings.currency;
+const child=id=>db.children.find(x=>x.id===id);
+const doctor=id=>db.doctors.find(x=>x.id===id);
+const dept=id=>db.depts.find(x=>x.id===id);
+const dname=id=>{const d=doctor(id);return d?d.name:'—'};
+const pname=id=>{const d=dept(id);return d?d.name:'—'};
+const tname=id=>id?pname(id):'غير محدد';
+const cname=id=>{const c=child(id);return c?c.name:'(طفل محذوف)'};
+const typesText=c=>Object.keys(c.prices||{}).map(pname).join(' • ')||'—';
+const recsOn=(cid,date)=>db.attendance.filter(a=>a.childId===cid&&a.date===date);
+const isP=a=>a.status==='present';
+const due=(cid,m)=>sum(db.attendance.filter(a=>a.childId===cid&&isP(a)&&(!m||mk(a.date)===m)).map(a=>a.price||0));
+const paid=(cid,m)=>sum(db.payments.filter(p=>p.childId===cid&&(!m||mk(p.date)===m)).map(p=>p.amount||0));
+const cnt=(cid,m)=>db.attendance.filter(a=>a.childId===cid&&isP(a)&&(!m||mk(a.date)===m)).length;
+const absCnt=(cid,m)=>db.attendance.filter(a=>a.childId===cid&&a.status==='absent'&&(!m||mk(a.date)===m)).length;
+function defPrice(c,deptId){
+ if(c&&c.prices&&c.prices[deptId]!==undefined&&c.prices[deptId]!=='')return +c.prices[deptId]||0;
+ const d=dept(deptId);if(d&&d.price!==''&&d.price!=null)return +d.price||0;
+ return +db.settings.defaultPrice||0;
+}
+function lastDoctor(cid,deptId){
+ const r=db.attendance.filter(a=>a.childId===cid&&isP(a)&&a.deptId===deptId&&a.doctorId&&doctor(a.doctorId)).sort((a,b)=>b.date.localeCompare(a.date))[0];
+ if(r)return r.doctorId;
+ const ds=db.doctors.filter(x=>x.active!==false&&x.deptId===deptId);
+ return ds.length===1?ds[0].id:'';
+}
+
+/* ---------- الحالة ---------- */
+const t0=todayStr();
+const S={view:'att',date:t0,q:'',kq:'',dept:'',child:null,cm:mk(t0),doc:null,dm:mk(t0),ym:mk(t0),am:mk(t0)};
+
+/* ---------- مساعدات الواجهة ---------- */
+function F(label,name,val,type,attrs,cls){return `<label class="f ${cls||''}">${label}<input name="${name}" type="${type||'text'}" value="${esc(val)}" ${attrs||''}></label>`}
+function TA(label,name,val,cls){return `<label class="f ${cls||''}">${label}<textarea name="${name}">${esc(val)}</textarea></label>`}
+function SEL(label,name,opts,val,cls){return `<label class="f ${cls||''}">${label}<select name="${name}">${opts.map(o=>`<option value="${esc(o[0])}" ${String(o[0])===String(val||'')?'selected':''}>${esc(o[1])}</option>`).join('')}</select></label>`}
+function mnav(key,m){return `<div class="datebar"><button class="btn sm" data-a="mshift" data-k="${key}" data-n="-1">‹ السابق</button><div class="title">${mLabel(m)}</div><button class="btn sm" data-a="mshift" data-k="${key}" data-n="1">التالي ›</button></div>`}
+function modal(title,body,onSave,label){
+ const m=document.createElement('div');m.className='overlay';
+ m.innerHTML=`<form class="modal"><h3>${title}</h3><div class="mbody">${body}</div><div class="mact"><button class="btn primary" type="submit">${label||'حفظ'}</button><button class="btn ghost" type="button" data-close>إلغاء</button></div></form>`;
+ document.body.appendChild(m);
+ m.querySelector('[data-close]').onclick=()=>m.remove();
+ m.querySelector('form').addEventListener('submit',e=>{e.preventDefault();const fd={};new FormData(e.target).forEach((v,k)=>fd[k]=v);if(onSave(fd)!==false)m.remove()});
+ return m;
+}
+const deptOpts=(cur)=>[['','— بدون قسم —']].concat(db.depts.filter(d=>d.active!==false||d.id===cur).map(d=>[d.id,d.name]));
+function docSelect(name,deptId,cur){
+ const docs=db.doctors.filter(x=>x.active!==false||x.id===cur);
+ const a=docs.filter(x=>x.deptId===deptId),b=docs.filter(x=>x.deptId!==deptId);
+ const o=x=>`<option value="${x.id}" ${x.id===cur?'selected':''}>${esc(x.name)}</option>`;
+ return `<select name="${name}"><option value="">— اختر الدكتور —</option>${a.map(o).join('')}${b.length?`<optgroup label="أطباء آخرون">${b.map(o).join('')}</optgroup>`:''}</select>`;
+}
+
+/* ---------- الحضور اليومي ---------- */
+function vAtt(){
+ const d=S.date,q=S.q.trim();
+ const dayRecs=db.attendance.filter(a=>a.date===d);
+ const pres=dayRecs.filter(isP);
+ const absKids=new Set(dayRecs.filter(a=>a.status==='absent').map(a=>a.childId));
+ const presKids=new Set(pres.map(a=>a.childId));
+ let kids=db.children.filter(c=>{if(recsOn(c.id,d).length)return true;if(c.status==='inactive')return false;if(c.startDate&&c.startDate>d)return false;return true});
+ const pending=kids.filter(c=>!recsOn(c.id,d).length).length;
+ if(S.dept)kids=kids.filter(c=>(c.prices&&c.prices[S.dept]!==undefined)||recsOn(c.id,d).some(a=>a.deptId===S.dept));
+ if(q)kids=kids.filter(c=>(c.name+' '+(c.phone1||'')).includes(q));
+ kids.sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+ const byDoc={},byType={};
+ pres.forEach(a=>{byDoc[a.doctorId]=(byDoc[a.doctorId]||0)+1;byType[a.deptId]=(byType[a.deptId]||0)+1});
+ const docChips=Object.keys(byDoc).map(id=>`<span class="badge b-pri">د. ${esc(dname(id))}: ${byDoc[id]}</span>`).join(' ');
+ const typeChips=Object.keys(byType).map(id=>`<span class="badge b-ok">${esc(tname(id))}: ${byType[id]}</span>`).join(' ');
+ const rows=kids.map(c=>{
+  const rs=recsOn(c.id,d),ps=rs.filter(isP),ab=rs.some(a=>a.status==='absent');
+  let st;
+  if(ps.length)st=ps.map(a=>`<div><span class="badge b-ok">${esc(tname(a.deptId))}</span> <span class="sub">د. ${esc(dname(a.doctorId))} • ${money(a.price)}</span></div>`).join('');
+  else if(ab)st='<span class="badge b-bad">غائب</span>';
+  else st='<span class="badge b-mut">لم يُسجل</span>';
+  return `<div class="item"><span class="avatar">${esc(c.name.charAt(0))}</span>
+   <div class="who" data-a="openChild" data-id="${c.id}"><b>${esc(c.name)}</b><div class="sub">${age(c.birthDate)} • ${esc(typesText(c))}</div></div>
+   <div class="st">${st}</div>
+   <div class="row-h" style="margin:0">
+    <button class="btn ok sm" data-a="sessions" data-id="${c.id}">${ps.length?'تعديل الجلسات':'حضر'}</button>
+    <button class="btn bad sm" data-a="absent" data-id="${c.id}">غاب</button>
+    ${rs.length?`<button class="btn ghost sm" data-a="clearRec" data-id="${c.id}">مسح</button>`:''}
+   </div></div>`}).join('');
+ const chips=`<button class="pill ${!S.dept?'on':''}" data-a="setDept" data-id="">الكل</button> `+db.depts.filter(x=>x.active!==false).map(x=>`<button class="pill ${S.dept===x.id?'on':''}" data-a="setDept" data-id="${x.id}">${esc(x.name)}</button>`).join(' ');
+ return `<h2>الحضور اليومي</h2>
+ <div class="card"><div class="datebar">
+  <button class="btn sm" data-a="shiftDate" data-id="-1">‹ اليوم السابق</button>
+  <div class="title">${dayLabel(d)}${d===todayStr()?'<div class="sub">اليوم</div>':''}</div>
+  <button class="btn sm" data-a="shiftDate" data-id="1">اليوم التالي ›</button>
+  <input type="date" id="dp" value="${d}">
+  ${d!==todayStr()?'<button class="btn primary sm" data-a="today">رجوع لليوم</button>':''}
+ </div>
+ <div class="sub" style="margin-top:8px">اختار أي يوم من التاريخ، وتقدر تسجل أو تعدل أو تحذف الجلسات فيه.</div></div>
+ <div class="stats">
+  <div class="stat ok"><div class="l">إجمالي الجلسات</div><div class="n">${pres.length}</div></div>
+  <div class="stat ok"><div class="l">أطفال حضروا</div><div class="n">${presKids.size}</div></div>
+  <div class="stat bad"><div class="l">غياب</div><div class="n">${absKids.size}</div></div>
+  <div class="stat"><div class="l">لم يُسجل بعد</div><div class="n">${pending}</div></div>
+  <div class="stat pri"><div class="l">إيراد اليوم</div><div class="n" style="font-size:20px">${money(sum(pres.map(a=>a.price||0)))}</div></div>
+ </div>
+ ${(docChips||typeChips)?`<div class="card">${typeChips?`<div class="sub" style="margin-bottom:6px">الجلسات حسب النوع</div><div style="margin-bottom:10px">${typeChips}</div>`:''}${docChips?`<div class="sub" style="margin-bottom:6px">الجلسات حسب الدكتور</div>${docChips}`:''}</div>`:''}
+ <div class="card">
+  <input type="search" id="q" data-s="q" placeholder="🔍 ابحث باسم الطفل أو الرقم" value="${esc(S.q)}" style="margin-bottom:10px">
+  <div class="chips" style="margin-bottom:8px">${chips}</div>
+  ${rows||`<div class="empty">${db.children.length?'لا توجد نتائج':'لا يوجد أطفال بعد — أضف أول طفل من تبويب «الأطفال»'}</div>`}
+ </div>`;
+}
+
+/* نافذة تسجيل / تعديل / حذف جلسات طفل في يوم معين */
+function openSessions(cid,date){
+ const c=child(cid);
+ if(!db.doctors.some(x=>x.active!==false)){toast('أضف الدكاترة أولاً من لوحة التحكم');S.view='set';render();return}
+ const recs=recsOn(cid,date);
+ const presMap={};recs.filter(isP).forEach(a=>{presMap[a.deptId||'']=a});
+ const enrolled=Object.keys(c.prices||{});
+ let list=db.depts.filter(x=>x.active!==false||presMap[x.id]||enrolled.indexOf(x.id)>-1);
+ list.sort((a,b)=>(enrolled.indexOf(b.id)>-1?1:0)-(enrolled.indexOf(a.id)>-1?1:0));
+ if(presMap['']&&!dept(''))list=list.concat([{id:'',name:'غير محدد'}]);
+ const noRecs=!recs.length;
+ const body=`<div class="sub">${dayLabel(date)} — اختار نوع الجلسة (ينفع أكتر من نوع في نفس اليوم)</div>`+
+ list.map(x=>{
+  const ex=presMap[x.id];
+  const on=!!ex||(noRecs&&enrolled.length===1&&enrolled[0]===x.id);
+  const price=ex?ex.price:defPrice(c,x.id);
+  const doc=ex&&ex.doctorId?ex.doctorId:lastDoctor(cid,x.id);
+  return `<div class="srow ${on?'on':''}"><label class="chip"><input type="checkbox" name="on_${x.id}" ${on?'checked':''}><span>${esc(x.name)}${enrolled.indexOf(x.id)>-1?'':' <small class="sub">(غير مسجل لدى الطفل)</small>'}</span></label>
+   <div class="fields"><label class="f">الدكتور${docSelect('doc_'+x.id,x.id,doc)}</label>${F('السعر','pr_'+x.id,price,'number','min=0 step=any')}</div></div>`}).join('')+
+ TA('ملاحظة (اختياري)','note',(recs.find(a=>a.note)||{}).note||'');
+ const m=modal('جلسات: '+esc(c.name),body,fd=>{
+  const picked=[];
+  for(let i=0;i<list.length;i++){
+   const x=list[i];
+   if(fd['on_'+x.id]){
+    if(!fd['doc_'+x.id]){toast('اختر الدكتور لجلسة '+x.name);return false}
+    picked.push({deptId:x.id,doctorId:fd['doc_'+x.id],price:+fd['pr_'+x.id]||0});
+   }
+  }
+  if(!picked.length&&!Object.keys(presMap).length){toast('اختر نوع جلسة واحد على الأقل');return false}
+  db.attendance=db.attendance.filter(a=>!(a.childId===cid&&a.date===date));
+  picked.forEach(p=>db.attendance.push({id:uid(),date:date,childId:cid,deptId:p.deptId,status:'present',doctorId:p.doctorId,price:p.price,note:fd.note||''}));
+  save();render();toast(picked.length?'تم حفظ الجلسات':'تم حذف الجلسات');
+ },'حفظ');
+ m.querySelectorAll('.srow input[type=checkbox]').forEach(cb=>cb.addEventListener('change',()=>cb.closest('.srow').classList.toggle('on',cb.checked)));
+}
+
+/* ---------- الأطفال ---------- */
+function vKids(){
+ const q=S.kq.trim();
+ let list=db.children.slice().sort((a,b)=>a.name.localeCompare(b.name,'ar'));
+ if(q)list=list.filter(c=>(c.name+' '+(c.phone1||'')+' '+(c.phone2||'')).includes(q));
+ const rows=list.map(c=>{const bal=due(c.id)-paid(c.id);
+  return `<div class="item"><span class="avatar">${esc(c.name.charAt(0))}</span>
+  <div class="who" data-a="openChild" data-id="${c.id}"><b>${esc(c.name)}</b> ${c.status==='inactive'?'<span class="badge b-mut">متوقف</span>':''}
+   <div class="sub">${age(c.birthDate)} • ${esc(typesText(c))} • <span class="ltr">${esc(c.phone1||'')}</span></div></div>
+  <div style="text-align:end"><div class="sub">المتبقي</div><div class="${bal>0?'neg':'pos'}">${money(bal)}</div></div></div>`}).join('');
+ return `<div class="row-h"><h2 style="margin:0">الأطفال (${db.children.length})</h2><div class="sp"></div><button class="btn primary" data-a="newChild">+ إضافة طفل</button></div>
+ <div class="card"><input type="search" id="kq" data-s="kq" placeholder="🔍 ابحث بالاسم أو رقم الهاتف" value="${esc(S.kq)}" style="margin-bottom:8px">
+ ${rows||'<div class="empty">لا يوجد أطفال</div>'}</div>`;
+}
+function childForm(c){
+ const isNew=!c;c=c||{};
+ const prices=c.prices||{};
+ const ds=db.depts.filter(d=>d.active!==false||prices[d.id]!==undefined);
+ const typesBlock=`<div class="wide"><div class="sub" style="font-weight:700">أنواع الجلسات وسعر كل نوع</div>
+  <div class="sub">علّم على النوع اللي بياخده الطفل واكتب سعر الجلسة بتاعه.</div>
+  ${ds.map(d=>{const on=prices[d.id]!==undefined;const v=on?prices[d.id]:defPrice(null,d.id);
+   return `<div class="prow"><label class="chip"><input type="checkbox" name="en_${d.id}" ${on?'checked':''}><span>${esc(d.name)}</span></label>${F('سعر الجلسة','pr_'+d.id,v,'number','min=0 step=any')}</div>`}).join('')||'<div class="empty">أضف أقسام من لوحة التحكم أولاً</div>'}</div>`;
+ return `<div class="grid2">
+  ${F('اسم الطفل *','name',c.name,'text','required','wide')}
+  ${SEL('الجنس','gender',[['','—'],['ذكر','ذكر'],['أنثى','أنثى']],c.gender)}
+  ${F('تاريخ الميلاد','birthDate',c.birthDate,'date')}
+  ${F('تاريخ بدء العلاج','startDate',c.startDate!==undefined?c.startDate:todayStr(),'date')}
+  ${F('اسم ولي الأمر','guardian',c.guardian)}
+  ${SEL('صلة القرابة','relation',[['','—'],['الأب','الأب'],['الأم','الأم'],['الجد','الجد'],['الجدة','الجدة'],['العم / الخال','العم / الخال'],['أخرى','أخرى']],c.relation)}
+  ${F('رقم الهاتف 1 *','phone1',c.phone1,'tel','required')}
+  ${F('رقم الهاتف 2','phone2',c.phone2,'tel')}
+  ${F('رقم للطوارئ','phone3',c.phone3,'tel')}
+  ${typesBlock}
+  ${F('العنوان','address',c.address,'text','','wide')}
+  ${F('التشخيص / الحالة','diagnosis',c.diagnosis,'text','','wide')}
+  ${F('محوّل من (الطبيب)','referral',c.referral)}
+  ${F('المدرسة / الحضانة','school',c.school)}
+  ${F('رقم شهادة الميلاد / الرقم القومي','nid',c.nid)}
+  ${F('عدد الجلسات أسبوعيًا','perWeek',c.perWeek,'number','min=0')}
+  ${TA('التاريخ المرضي / الحساسية / الأدوية','medical',c.medical,'wide')}
+  ${TA('ملاحظات','notes',c.notes,'wide')}
+  ${SEL('حالة الملف','status',[['active','مستمر'],['inactive','متوقف']],c.status||'active')}
+ </div>`;
+}
+function saveChildData(fd,c){
+ const name=(fd.name||'').trim();
+ if(!name){toast('اسم الطفل مطلوب');return false}
+ const prices={};
+ db.depts.forEach(d=>{if(fd['en_'+d.id])prices[d.id]=+fd['pr_'+d.id]||0});
+ const o={name:name,gender:fd.gender,birthDate:fd.birthDate,startDate:fd.startDate,guardian:fd.guardian,relation:fd.relation,phone1:fd.phone1,phone2:fd.phone2,phone3:fd.phone3,prices:prices,address:fd.address,diagnosis:fd.diagnosis,referral:fd.referral,school:fd.school,nid:fd.nid,perWeek:fd.perWeek,medical:fd.medical,notes:fd.notes,status:fd.status||'active'};
+ if(c){Object.assign(c,o)}else{o.id=uid();o.created=todayStr();db.children.push(o);S.child=o.id}
+ save();return true;
+}
+function vChild(){
+ const c=child(S.child);
+ if(!c){S.view='kids';return vKids()}
+ const m=S.cm;
+ const mr=db.attendance.filter(a=>a.childId===c.id&&mk(a.date)===m).sort((a,b)=>b.date.localeCompare(a.date));
+ const dueAll=due(c.id),paidAll=paid(c.id),bal=dueAll-paidAll;
+ const byDoc={},byType={};mr.filter(isP).forEach(a=>{byDoc[a.doctorId]=(byDoc[a.doctorId]||0)+1;byType[a.deptId]=(byType[a.deptId]||0)+1});
+ const pays=db.payments.filter(p=>p.childId===c.id).sort((a,b)=>b.date.localeCompare(a.date));
+ const tel=v=>v?`<a href="tel:${esc(v)}">${esc(v)}</a>`:'—';
+ const I=(l,v)=>`<div><b>${l}</b>${v||'—'}</div>`;
+ const priceBadges=Object.keys(c.prices||{}).map(id=>`<span class="badge b-pri">${esc(pname(id))}: ${money(c.prices[id])}</span>`).join(' ')||'—';
+ return `<div class="row-h"><button class="btn sm" data-a="go" data-id="kids">› رجوع</button><div class="sp"></div>
+  <button class="btn sm" data-a="editChild" data-id="${c.id}">✏️ تعديل</button>
+  <button class="btn sm outline-bad" data-a="delChild" data-id="${c.id}">🗑 حذف</button></div>
+ <div class="card"><div class="row-h"><span class="avatar" style="width:60px;height:60px;font-size:26px">${esc(c.name.charAt(0))}</span>
+  <div><h2 style="margin:0">${esc(c.name)}</h2><div class="sub">${age(c.birthDate)} ${c.gender?'• '+esc(c.gender):''}</div></div>
+  <span class="badge ${c.status==='inactive'?'b-mut':'b-ok'}">${c.status==='inactive'?'متوقف':'مستمر'}</span></div>
+  <div class="info">
+   <div style="grid-column:1/-1"><b>أنواع الجلسات وسعر كل نوع</b>${priceBadges}</div>
+   ${I('تاريخ الميلاد',fmt(c.birthDate))}${I('تاريخ بدء العلاج',fmt(c.startDate))}
+   ${I('ولي الأمر',esc(c.guardian)+(c.relation?' ('+esc(c.relation)+')':''))}
+   ${I('هاتف 1',tel(c.phone1))}${I('هاتف 2',tel(c.phone2))}${I('رقم الطوارئ',tel(c.phone3))}
+   ${I('العنوان',esc(c.address))}${I('التشخيص / الحالة',esc(c.diagnosis))}${I('محوّل من',esc(c.referral))}
+   ${I('المدرسة / الحضانة',esc(c.school))}${I('رقم الميلاد / القومي',esc(c.nid))}${I('الجلسات أسبوعيًا',esc(c.perWeek))}
+   <div style="grid-column:1/-1"><b>التاريخ المرضي / الحساسية / الأدوية</b>${esc(c.medical)||'—'}</div>
+   <div style="grid-column:1/-1"><b>ملاحظات</b>${esc(c.notes)||'—'}</div>
+  </div></div>
+ <div class="card"><div class="row-h"><h3 style="margin:0">💰 الحساب</h3><div class="sp"></div><button class="btn primary sm" data-a="addPay" data-id="${c.id}">+ تسجيل دفعة</button></div>
+  <div class="stats">
+   <div class="stat"><div class="l">إجمالي المستحق (كل المدة)</div><div class="n" style="font-size:20px">${money(dueAll)}</div></div>
+   <div class="stat ok"><div class="l">إجمالي المدفوع</div><div class="n" style="font-size:20px">${money(paidAll)}</div></div>
+   <div class="stat ${bal>0?'bad':'ok'}"><div class="l">${bal<0?'رصيد دائن (مدفوع زيادة)':'المتبقي'}</div><div class="n" style="font-size:20px">${money(Math.abs(bal))}</div></div>
+  </div></div>
+ <div class="card"><div class="row-h">${mnav('cm',m)}<div class="sp"></div><button class="btn primary sm" data-a="addSessDate" data-id="${c.id}">+ تسجيل جلسة بتاريخ</button></div>
+  <div class="stats">
+   <div class="stat ok"><div class="l">جلسات الشهر</div><div class="n">${cnt(c.id,m)}</div></div>
+   <div class="stat bad"><div class="l">أيام غياب</div><div class="n">${absCnt(c.id,m)}</div></div>
+   <div class="stat"><div class="l">مستحق الشهر</div><div class="n" style="font-size:20px">${money(due(c.id,m))}</div></div>
+   <div class="stat"><div class="l">مدفوع في الشهر</div><div class="n" style="font-size:20px">${money(paid(c.id,m))}</div></div>
+  </div>
+  ${Object.keys(byType).length?`<div style="margin-bottom:8px"><span class="sub">حسب النوع: </span>${Object.keys(byType).map(id=>`<span class="badge b-ok">${esc(tname(id))}: ${byType[id]}</span>`).join(' ')}</div>`:''}
+  ${Object.keys(byDoc).length?`<div style="margin-bottom:10px"><span class="sub">مع كل دكتور: </span>${Object.keys(byDoc).map(id=>`<span class="badge b-pri">د. ${esc(dname(id))}: ${byDoc[id]}</span>`).join(' ')}</div>`:''}
+  <div class="tw"><table><thead><tr><th>التاريخ</th><th>الحالة</th><th>نوع الجلسة</th><th>الدكتور</th><th>السعر</th><th></th></tr></thead><tbody>
+  ${mr.map(a=>`<tr><td>${dayLabel(a.date)}</td><td>${isP(a)?'<span class="badge b-ok">حضر</span>':'<span class="badge b-bad">غاب</span>'}</td><td>${isP(a)?esc(tname(a.deptId)):'—'}</td><td>${isP(a)?esc(dname(a.doctorId)):'—'}</td><td>${isP(a)?money(a.price):'—'}</td><td><button class="btn sm" data-a="editDay" data-id="${c.id}" data-date="${a.date}">تعديل</button> <button class="btn sm outline-bad" data-a="delRec" data-id="${a.id}">حذف</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">لا توجد سجلات في هذا الشهر</td></tr>'}
+  </tbody></table></div></div>
+ <div class="card"><h3>سجل الدفع</h3><div class="tw"><table><thead><tr><th>التاريخ</th><th>المبلغ</th><th>ملاحظة</th><th></th></tr></thead><tbody>
+  ${pays.map(p=>`<tr><td>${fmt(p.date)}</td><td class="pos">${money(p.amount)}</td><td>${esc(p.note||'')}</td><td><button class="btn sm outline-bad" data-a="delPay" data-id="${p.id}">حذف</button></td></tr>`).join('')||'<tr><td colspan="4" class="empty">لا توجد مدفوعات</td></tr>'}
+  </tbody></table></div></div>`;
+}
+
+/* ---------- الأطباء ---------- */
+function vDocs(){
+ const m=S.dm;
+ const rows=db.doctors.map(d=>{const rs=db.attendance.filter(a=>a.doctorId===d.id&&isP(a));return{d:d,month:rs.filter(a=>mk(a.date)===m).length,total:rs.length}});
+ let detail='';
+ const d=doctor(S.doc);
+ if(d){
+  const rs=db.attendance.filter(a=>a.doctorId===d.id&&isP(a));
+  const mrs=rs.filter(a=>mk(a.date)===m);
+  const map={};
+  rs.forEach(a=>{const o=map[a.childId]||(map[a.childId]={m:0,t:0,last:'',types:{}});o.t++;if(mk(a.date)===m){o.m++;o.types[a.deptId]=1}if(a.date>o.last)o.last=a.date});
+  const kids=Object.keys(map).sort((a,b)=>map[b].m-map[a].m||map[b].t-map[a].t);
+  detail=`<div class="card"><div class="row-h"><h3 style="margin:0">د. ${esc(d.name)} <span class="sub">${esc(pname(d.deptId))}</span></h3></div>
+  <div class="stats">
+   <div class="stat ok"><div class="l">جلسات ${mLabel(m)}</div><div class="n">${mrs.length}</div></div>
+   <div class="stat"><div class="l">أيام العمل في الشهر</div><div class="n">${new Set(mrs.map(a=>a.date)).size}</div></div>
+   <div class="stat"><div class="l">الإجمالي الكلي</div><div class="n">${rs.length}</div></div>
+   <div class="stat"><div class="l">أطفال الشهر</div><div class="n">${kids.filter(k=>map[k].m>0).length}</div></div>
+  </div>
+  <div class="tw"><table><thead><tr><th>الطفل</th><th>نوع الجلسة (الشهر)</th><th>جلساته هذا الشهر</th><th>الإجمالي مع الدكتور</th><th>آخر جلسة</th></tr></thead><tbody>
+  ${kids.map(k=>`<tr class="click" data-a="openChild" data-id="${k}"><td>${esc(cname(k))}</td><td>${esc(Object.keys(map[k].types).map(tname).join(' • ')||'—')}</td><td><b>${map[k].m}</b></td><td>${map[k].t}</td><td>${fmt(map[k].last)}</td></tr>`).join('')||'<tr><td colspan="5" class="empty">لا توجد جلسات مسجلة</td></tr>'}
+  </tbody><tfoot><tr><td>الإجمالي</td><td></td><td>${mrs.length}</td><td>${rs.length}</td><td></td></tr></tfoot></table></div></div>`;
+ }
+ return `<h2>الأطباء</h2>
+ <div class="card"><div class="row-h">${mnav('dm',m)}</div>
+  <div class="tw"><table><thead><tr><th>الدكتور</th><th>القسم</th><th>جلسات ${mLabel(m)}</th><th>الإجمالي الكلي</th></tr></thead><tbody>
+  ${rows.map(r=>`<tr class="click" data-a="selDoc" data-id="${r.d.id}" style="${S.doc===r.d.id?'background:var(--primary-soft)':''}"><td><b>${esc(r.d.name)}</b> ${r.d.active===false?'<span class="badge b-mut">موقوف</span>':''}</td><td>${esc(pname(r.d.deptId))}</td><td><b>${r.month}</b></td><td>${r.total}</td></tr>`).join('')||'<tr><td colspan="4" class="empty">لم يتم إضافة أطباء — أضفهم من لوحة التحكم</td></tr>'}
+  </tbody></table></div><div class="sub" style="margin-top:8px">اضغط على اسم الدكتور لعرض قائمته التفصيلية</div></div>
+ ${detail}`;
+}
+
+/* ---------- سجل الأيام ---------- */
+function vDays(){
+ const m=S.ym,by={};
+ db.attendance.filter(a=>mk(a.date)===m).forEach(a=>{const o=by[a.date]||(by[a.date]={p:0,k:new Set(),a:new Set(),r:0});if(isP(a)){o.p++;o.k.add(a.childId);o.r+=a.price||0}else o.a.add(a.childId)});
+ const dates=Object.keys(by).sort((a,b)=>b.localeCompare(a));
+ const tp=sum(dates.map(k=>by[k].p)),ta=sum(dates.map(k=>by[k].a.size)),tr=sum(dates.map(k=>by[k].r));
+ return `<h2>سجل الأيام</h2>
+ <div class="card"><div class="row-h">${mnav('ym',m)}<div class="sp"></div><label class="f" style="min-width:180px">اذهب إلى يوم محدد<input type="date" id="jump"></label></div>
+ <div class="stats">
+  <div class="stat ok"><div class="l">جلسات الشهر</div><div class="n">${tp}</div></div>
+  <div class="stat bad"><div class="l">غياب</div><div class="n">${ta}</div></div>
+  <div class="stat"><div class="l">أيام العمل</div><div class="n">${dates.length}</div></div>
+  <div class="stat pri"><div class="l">إيراد الشهر</div><div class="n" style="font-size:20px">${money(tr)}</div></div>
+ </div>
+ <div class="tw"><table><thead><tr><th>اليوم</th><th>جلسات</th><th>أطفال</th><th>غياب</th><th>الإيراد</th></tr></thead><tbody>
+ ${dates.map(k=>`<tr class="click" data-a="openDay" data-id="${k}"><td><b>${dayLabel(k)}</b></td><td><span class="badge b-ok">${by[k].p}</span></td><td>${by[k].k.size}</td><td><span class="badge b-bad">${by[k].a.size}</span></td><td>${money(by[k].r)}</td></tr>`).join('')||'<tr><td colspan="5" class="empty">لا توجد سجلات في هذا الشهر</td></tr>'}
+ </tbody></table></div><div class="sub" style="margin-top:8px">اضغط على أي يوم لفتحه وتعديل الجلسات</div></div>`;
+}
+
+/* ---------- الحسابات ---------- */
+function vAcc(){
+ const m=S.am;
+ const list=db.children.filter(c=>due(c.id)>0||paid(c.id)>0).sort((a,b)=>(due(b.id)-paid(b.id))-(due(a.id)-paid(a.id)));
+ const tDue=sum(list.map(c=>due(c.id,m))),tPaid=sum(list.map(c=>paid(c.id,m))),tBal=sum(list.map(c=>due(c.id)-paid(c.id)));
+ return `<h2>الحسابات</h2>
+ <div class="card"><div class="row-h">${mnav('am',m)}</div>
+ <div class="stats">
+  <div class="stat"><div class="l">مستحق الشهر</div><div class="n" style="font-size:20px">${money(tDue)}</div></div>
+  <div class="stat ok"><div class="l">المحصّل في الشهر</div><div class="n" style="font-size:20px">${money(tPaid)}</div></div>
+  <div class="stat bad"><div class="l">إجمالي المتأخرات</div><div class="n" style="font-size:20px">${money(tBal)}</div></div>
+ </div>
+ <div class="tw"><table><thead><tr><th>الطفل</th><th>أنواع الجلسات</th><th>جلسات الشهر</th><th>مستحق الشهر</th><th>مدفوع الشهر</th><th>المتبقي (إجمالي)</th></tr></thead><tbody>
+ ${list.map(c=>{const b=due(c.id)-paid(c.id);return `<tr class="click" data-a="openChild" data-id="${c.id}"><td><b>${esc(c.name)}</b></td><td>${esc(typesText(c))}</td><td>${cnt(c.id,m)}</td><td>${money(due(c.id,m))}</td><td>${money(paid(c.id,m))}</td><td class="${b>0?'neg':'pos'}">${money(b)}</td></tr>`}).join('')||'<tr><td colspan="6" class="empty">لا توجد حسابات بعد</td></tr>'}
+ </tbody><tfoot><tr><td>الإجمالي</td><td></td><td>${sum(list.map(c=>cnt(c.id,m)))}</td><td>${money(tDue)}</td><td>${money(tPaid)}</td><td>${money(tBal)}</td></tr></tfoot></table></div></div>`;
+}
+
+/* ---------- لوحة التحكم ---------- */
+function vSet(){
+ const s=db.settings;
+ return `<h2>لوحة التحكم</h2>
+ <div class="card"><div class="row-h"><h3 style="margin:0">إعدادات المركز</h3><div class="sp"></div><button class="btn sm" data-a="editSettings">✏️ تعديل</button></div>
+  <div class="info"><div><b>اسم المركز</b>${esc(s.center)}</div><div><b>العملة</b>${esc(s.currency)}</div><div><b>سعر جلسة افتراضي (لو القسم بدون سعر)</b>${money(s.defaultPrice)}</div></div></div>
+ <div class="card"><div class="row-h"><h3 style="margin:0">الأقسام (أنواع الجلسات)</h3><div class="sp"></div><button class="btn primary sm" data-a="addDept">+ إضافة قسم</button></div>
+  ${db.depts.map(d=>{const n=db.children.filter(c=>c.prices&&c.prices[d.id]!==undefined).length,dn=db.doctors.filter(x=>x.deptId===d.id).length;
+   return `<div class="item"><div class="who" style="cursor:default"><b>${esc(d.name)}</b> ${d.active===false?'<span class="badge b-mut">موقوف</span>':''}<div class="sub">${n} طفل • ${dn} دكتور • سعر مقترح: ${d.price===''||d.price==null?'—':money(d.price)}</div></div>
+   <button class="btn sm" data-a="editDept" data-id="${d.id}">تعديل</button>
+   <button class="btn sm" data-a="toggleDept" data-id="${d.id}">${d.active===false?'تفعيل':'إيقاف'}</button>
+   <button class="btn sm outline-bad" data-a="delDept" data-id="${d.id}">حذف</button></div>`}).join('')||'<div class="empty">لا توجد أقسام</div>'}</div>
+ <div class="card"><div class="row-h"><h3 style="margin:0">الدكاترة</h3><div class="sp"></div><button class="btn primary sm" data-a="addDoc">+ إضافة دكتور</button></div>
+  ${db.doctors.map(d=>`<div class="item"><div class="who" style="cursor:default"><b>د. ${esc(d.name)}</b> ${d.active===false?'<span class="badge b-mut">موقوف</span>':''}<div class="sub">${esc(pname(d.deptId))} ${d.phone?'• <span class="ltr">'+esc(d.phone)+'</span>':''}</div></div>
+   <button class="btn sm" data-a="editDoc" data-id="${d.id}">تعديل</button>
+   <button class="btn sm" data-a="toggleDoc" data-id="${d.id}">${d.active===false?'تفعيل':'إيقاف'}</button>
+   <button class="btn sm outline-bad" data-a="delDoc" data-id="${d.id}">حذف</button></div>`).join('')||'<div class="empty">لم تضف أي دكتور بعد — اضغط «إضافة دكتور»</div>'}</div>
+ <div class="card"><h3>النسخ الاحتياطي</h3>
+  <div class="hint">البيانات محفوظة على الايباد داخل المتصفح. خد نسخة احتياطية بشكل دوري (مثلاً أسبوعيًا) واحفظها في iCloud، عشان لو اتمسح بيانات سفاري ما تضيعش.</div>
+  <div class="sub" style="margin-bottom:10px">آخر نسخة احتياطية: ${s.lastBackup?fmt(s.lastBackup):'لم يتم بعد'}</div>
+  <div class="row-h"><button class="btn primary" data-a="export">⬇️ تصدير نسخة احتياطية</button>
+  <label class="btn" style="display:inline-flex;align-items:center">⬆️ استرجاع من نسخة<input type="file" id="imp" accept=".json,application/json" hidden></label>
+  <button class="btn outline-bad" data-a="wipe">مسح كل البيانات</button></div></div>`;
+}
+function deptForm(d){d=d||{};return F('اسم القسم / نوع الجلسة','name',d.name,'text','required')+F('سعر جلسة مقترح (اختياري، بيظهر تلقائيًا عند تسجيل طفل جديد)','price',d.price,'number','min=0 step=any')}
+function docForm(d){d=d||{};return F('اسم الدكتور','name',d.name,'text','required')+SEL('القسم','deptId',deptOpts(d.deptId),d.deptId)+F('رقم الهاتف','phone',d.phone,'tel')}
+
+/* ---------- العرض ---------- */
+function render(){
+ const ae=document.activeElement;
+ const fid=ae&&ae.id&&ae.type==='search'?ae.id:null;
+ const views={att:vAtt,kids:vKids,child:vChild,docs:vDocs,days:vDays,acc:vAcc,set:vSet};
+ document.querySelectorAll('.nav-btn[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===S.view||(S.view==='child'&&b.dataset.v==='kids')));
+ $('#brand').innerHTML=esc(db.settings.center)+'<small>إدارة مركز العلاج الطبيعي للأطفال</small>';
+ document.title=db.settings.center;
+ const dark=document.documentElement.dataset.theme==='dark';
+ $('#themeBtn').innerHTML=dark?'☀️ <span>الوضع الفاتح</span>':'🌙 <span>الوضع الداكن</span>';
+ $('#main').innerHTML=views[S.view]();
+ if(fid){const i=document.getElementById(fid);if(i){i.focus();try{i.setSelectionRange(i.value.length,i.value.length)}catch(e){}}}
+}
+function applyTheme(){const t=db.settings.theme||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=t}
+
+/* ---------- الأحداث ---------- */
+const A={
+ go:v=>{S.view=v;render();window.scrollTo(0,0)},
+ theme:()=>{db.settings.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';save();applyTheme();render()},
+ shiftDate:n=>{S.date=addDays(S.date,+n);render()},
+ today:()=>{S.date=todayStr();render()},
+ mshift:(id,t)=>{const k=t.dataset.k;S[k]=addMonth(S[k],+t.dataset.n);render()},
+ setDept:id=>{S.dept=id;render()},
+ openChild:id=>{S.child=id;S.view='child';render();window.scrollTo(0,0)},
+ openDay:id=>{S.date=id;S.view='att';render();window.scrollTo(0,0)},
+ selDoc:id=>{S.doc=id;render()},
+ sessions:id=>openSessions(id,S.date),
+ editDay:(id,t)=>openSessions(id,t.dataset.date),
+ addSessDate:id=>modal('تسجيل جلسة بتاريخ',F('التاريخ','date',todayStr(),'date','required'),fd=>{const dt=fd.date;if(!dt)return false;setTimeout(()=>openSessions(id,dt),0)},'التالي'),
+ absent:id=>{const d=S.date;
+  if(recsOn(id,d).some(isP)&&!confirm('الطفل عنده جلسات حضور في اليوم ده. هتتحذف ويتسجل غائب. متابعة؟'))return;
+  db.attendance=db.attendance.filter(a=>!(a.childId===id&&a.date===d));
+  db.attendance.push({id:uid(),date:d,childId:id,deptId:'',status:'absent',doctorId:'',price:0,note:''});save();render()},
+ clearRec:id=>{const d=S.date;const n=recsOn(id,d).filter(isP).length;
+  if(n&&!confirm('مسح '+n+' جلسة من هذا اليوم لهذا الطفل؟'))return;
+  db.attendance=db.attendance.filter(a=>!(a.childId===id&&a.date===d));save();render()},
+ delRec:id=>{if(!confirm('حذف هذا السجل؟'))return;db.attendance=db.attendance.filter(a=>a.id!==id);save();render()},
+ newChild:()=>modal('إضافة طفل جديد',childForm(),fd=>{if(saveChildData(fd)===false)return false;S.view='child';render();toast('تمت إضافة الطفل')}),
+ editChild:id=>{const c=child(id);modal('تعديل بيانات الطفل',childForm(c),fd=>{if(saveChildData(fd,c)===false)return false;render();toast('تم الحفظ')})},
+ delChild:id=>{const c=child(id);if(!confirm('حذف ملف «'+c.name+'» نهائيًا مع كل جلساته ومدفوعاته؟'))return;
+  db.children=db.children.filter(x=>x.id!==id);db.attendance=db.attendance.filter(a=>a.childId!==id);db.payments=db.payments.filter(p=>p.childId!==id);save();S.view='kids';render()},
+ addPay:id=>{const c=child(id);const bal=Math.max(0,due(id)-paid(id));
+  modal('تسجيل دفعة: '+esc(c.name),F('المبلغ','amount',bal||'','number','required min=0 step=any')+F('التاريخ','date',todayStr(),'date','required')+TA('ملاحظة (اختياري)','note',''),fd=>{
+   if(!(+fd.amount>0)){toast('أدخل مبلغًا صحيحًا');return false}
+   db.payments.push({id:uid(),childId:id,date:fd.date||todayStr(),amount:+fd.amount,note:fd.note||''});save();render();toast('تم تسجيل الدفعة')})},
+ delPay:id=>{if(!confirm('حذف هذه الدفعة؟'))return;db.payments=db.payments.filter(p=>p.id!==id);save();render()},
+ editSettings:()=>modal('إعدادات المركز',F('اسم المركز','center',db.settings.center,'text','required')+F('رمز العملة','currency',db.settings.currency)+F('سعر جلسة افتراضي','defaultPrice',db.settings.defaultPrice,'number','min=0 step=any'),fd=>{
+   db.settings.center=fd.center.trim()||'k.physio';db.settings.currency=fd.currency.trim()||'ج.م';db.settings.defaultPrice=+fd.defaultPrice||0;save();render()}),
+ addDept:()=>modal('إضافة قسم',deptForm(),fd=>{const n=fd.name.trim();if(!n)return false;db.depts.push({id:uid(),name:n,active:true,price:fd.price===''?'':+fd.price});save();render()}),
+ editDept:id=>{const d=dept(id);modal('تعديل القسم',deptForm(d),fd=>{const n=fd.name.trim();if(!n)return false;d.name=n;d.price=fd.price===''?'':+fd.price;save();render()})},
+ toggleDept:id=>{const d=dept(id);d.active=d.active===false;save();render()},
+ delDept:id=>{const d=dept(id);
+  if(db.children.some(c=>c.prices&&c.prices[id]!==undefined)||db.doctors.some(x=>x.deptId===id)||db.attendance.some(a=>a.deptId===id)){toast('القسم مستخدم — أوقفه بدل الحذف');return}
+  if(!confirm('حذف قسم «'+d.name+'»؟'))return;db.depts=db.depts.filter(x=>x.id!==id);save();render()},
+ addDoc:()=>modal('إضافة دكتور',docForm(),fd=>{const n=fd.name.trim();if(!n)return false;db.doctors.push({id:uid(),name:n,deptId:fd.deptId,phone:fd.phone,active:true});save();render()}),
+ editDoc:id=>{const d=doctor(id);modal('تعديل الدكتور',docForm(d),fd=>{const n=fd.name.trim();if(!n)return false;d.name=n;d.deptId=fd.deptId;d.phone=fd.phone;save();render()})},
+ toggleDoc:id=>{const d=doctor(id);d.active=d.active===false;save();render()},
+ delDoc:id=>{const d=doctor(id);if(db.attendance.some(a=>a.doctorId===id)){toast('للدكتور جلسات مسجلة — أوقفه بدل الحذف للحفاظ على السجل');return}
+  if(!confirm('حذف الدكتور «'+d.name+'»؟'))return;db.doctors=db.doctors.filter(x=>x.id!==id);save();render()},
+ export:()=>{db.settings.lastBackup=todayStr();save();
+  const b=new Blob([JSON.stringify(db)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='k-physio-backup-'+todayStr()+'.json';document.body.appendChild(a);a.click();a.remove();render()},
+ wipe:()=>{if(!confirm('هتمسح كل البيانات نهائيًا. متأكد؟'))return;if(!confirm('تأكيد أخير: مسح كل الأطفال والحضور والمدفوعات؟'))return;db=seed();save();render();toast('تم مسح البيانات')}
+};
+document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t)return;const f=A[t.dataset.a];if(f)f(t.dataset.id,t)});
+document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.s;if(k){S[k]=e.target.value;render()}});
+document.addEventListener('change',e=>{
+ if(e.target.id==='dp'&&e.target.value){S.date=e.target.value;render()}
+ else if(e.target.id==='jump'&&e.target.value){S.date=e.target.value;S.view='att';render()}
+ else if(e.target.id==='imp'&&e.target.files[0]){
+  const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(!o.children||!o.attendance||!o.settings)throw 0;
+   if(!confirm('سيتم استبدال كل البيانات الحالية بالنسخة المختارة. متابعة؟'))return;db=o;fix();save();applyTheme();render();toast('تم استرجاع النسخة')}catch(x){toast('الملف غير صالح')}};r.readAsText(e.target.files[0])}
+});
+
+applyTheme();render();
+})();
+</script>
+</body>
+</html>
